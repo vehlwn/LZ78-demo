@@ -13,19 +13,19 @@ class Lz78Code:
 
 def encode(input_str: str) -> typing.List[Lz78Code]:
     ret = []
-    sub = ""
-    sub_dict = [""]
+    prev_sub = ""
+    sub_dict = {"": 0}
     for c in input_str:
-        it = sub_dict.count(sub + c)
-        if it == 0:
-            it2 = sub_dict.index(sub)
-            code = Lz78Code(it2, c)
+        next_sub = prev_sub + c
+        if next_sub not in sub_dict:
+            i = sub_dict[prev_sub]
+            code = Lz78Code(i, c)
             ret.append(code)
-            sub_dict.append(sub + c)
-            print(f"'{sub_dict[-1]}'\t{str(code)}\t{len(sub_dict)-1}")
-            sub = ""
+            sub_dict[next_sub] = len(sub_dict)
+            print(f"'{next_sub}'\t{str(code)}\t{len(sub_dict)-1}")
+            prev_sub = ""
         else:
-            sub += c
+            prev_sub = next_sub
     return ret
 
 
